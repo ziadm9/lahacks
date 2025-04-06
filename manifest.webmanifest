@@ -1,0 +1,13 @@
+{
+    "name": "MoodMate",
+    "start_url": "/lahacks/index.html",
+    "scope": "/lahacks/",
+    "display": "standalone", 
+    "icons": [
+        {
+          "src": "logo.png",
+          "type": "image/png",
+          "sizes": "700x700"
+        }
+    ]
+  }
