@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" style="height:100%">
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
-    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
-    <link rel="stylesheet" href="style2.css" />
-    <script src="sketch.js"></script> 
-    
-    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="logo1.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js" defer></script>
     <title>MoodMate</title>
   </head>
-  <body style="width:100%; height:100%; margin:0px">
-    <div id="frame" style="width:100%; margin:0px; background:#3d95cf"></div>
-    <div id="main" style="width:100%; height:100%; background: rgb(61,149,207);
-background: linear-gradient(180deg, rgba(61,149,207,1) 0%, rgba(104,187,255,1) 100%);">
-    <p id="title1">Current emotion:</p>
-    <p id="title2">Neutral</p>
-    <p id="title4">Accuracy:</p>
-    <p id="title3">N/A</p>
-</div>
+  <body onload="load()">
+    <video autoplay muted loop id="myVideo">
+        <source src="lahacks.mp4" type="video/mp4">
+      </video>
+    <div class="content" id="bigWrapper">
+        <div id="wrapper" class="col">
+            
+            <!-- <img src="logo.png" id="logo"> -->
+            <p id="appName">MoodMate</p>
+            <p id="appDesc">Enabling smoother social interactions for individuals with autism by helping them recognize and understand facial emotions in real time.</p>
+            <button id="button">Get Started</button>
+        </div>
+    </div>
   </body>
 </html>
