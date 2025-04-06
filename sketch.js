@@ -29,7 +29,7 @@ function setup() {
 
   canvas = createCanvas(480, 480);
   canvas.parent('frame');
-  video = createCapture(VIDEO, { flipped: true, video: { facingMode: "environment" }});
+  video = createCapture(VIDEO, { flipped: true});
   document.getElementById('frame').firstChild.style.width = "100%"
   document.getElementById('frame').firstChild.style.height = "100%"
   video.hide();
@@ -67,7 +67,7 @@ function draw() {
         j+=1
         stroke(255, 255, 0);
         strokeWeight(2);
-        point(keypoint.x, keypoint.y);
+        //point(keypoint.x, keypoint.y);
       }
       
     }
@@ -80,22 +80,31 @@ function draw() {
     anger = getDist(partsX[5],partsX[13], partsY[5],partsY[13])
     //print(anger/face.faceOval.width)
     eyeOpen = getDist(partsX[2],partsX[8], partsY[2],partsY[8])
-    if(Math.floor(100*((0.187-anger/face.faceOval.width)/0.007)) > 10 && Math.floor(100*((mouthWidth+tilt-0.375)/0.135)) > 10){
-      text(`anger ${Math.floor(100*((0.187-anger/face.faceOval.width)/0.007))}`, 300, 200)
+    if(Math.floor(100*((0.19-anger/face.faceOval.width)/0.01)) > 10 && Math.floor(100*((mouthWidth+tilt-0.375)/0.135)) > 5){
+      document.getElementById("title2").innerHTML = `Angry 😡`
+      document.getElementById("title3").innerHTML = `(${Math.floor(100*((0.19-anger/face.faceOval.width)/0.01))}%)`
+      //text(`anger ${Math.floor(100*((0.187-anger/face.faceOval.width)/0.007))}`, 300, 200)
     }
-    else if(Math.floor(100*((0.187-anger/face.faceOval.width)/0.007)) > 10){
-      console.log(anger/face.faceOval.width)
-      text(`frowning ${Math.floor(100*((0.187-anger/face.faceOval.width)/0.007))}`, 300, 200)
+    else if(Math.floor(100*((0.19-anger/face.faceOval.width)/0.01)) > 10){
+      document.getElementById("title2").innerHTML = `Sad 😔`
+      document.getElementById("title3").innerHTML =  `(${Math.floor(100*((0.19-anger/face.faceOval.width)/0.01))}%)`
+      //text(`frowning ${Math.floor(100*((0.187-anger/face.faceOval.width)/0.007))}`, 300, 200)
     }
     else if(Math.floor(100*((mouthWidth+tilt-0.375)/0.135)) > 10){
-      text(`smiling ${Math.floor(100*((mouthWidth+tilt-0.375)/0.135))}`, 300, 200)
+      document.getElementById("title2").innerHTML = `Happy 😊`
+      document.getElementById("title3").innerHTML =  `(${Math.floor(100*((mouthWidth+tilt-0.375)/0.135))}%)`
+      //text(`smiling ${Math.floor(100*((mouthWidth+tilt-0.375)/0.135))}`, 300, 200)
       
     }
     else if(Math.floor(100*((eyeOpen/face.faceOval.width-0.275)/0.05)) > 10){
-      text(`surprised ${Math.floor(100*((eyeOpen/face.faceOval.width-0.275)/0.05))}`, 300, 200)
+      document.getElementById("title2").innerHTML = `Surprised 😲`
+      document.getElementById("title3").innerHTML =  `(${Math.floor(100*((eyeOpen/face.faceOval.width-0.275)/0.05))}%)`
+      //text(`surprised ${Math.floor(100*((eyeOpen/face.faceOval.width-0.275)/0.05))}`, 300, 200)
     }
     else{
-      text("neutral", 300, 200)
+      document.getElementById("title2").innerHTML = `Neutral 😐`
+      document.getElementById("title3").innerHTML =  `--`
+      //text("neutral", 300, 200)
     }
     //print(partsY[1]-partsY[0]) 
     // mouthHeight = mouthHeight/face.faceOval.height
