@@ -16,7 +16,7 @@ button.onclick = async (event) => {
     bigWrapper.style.transform = "translateY(100vh)";
     setTimeout(function(){
         bigWrapper.style.display = "none";
-        window.location.href="index.html"
+        window.location.href="index2.html"
     }, 750)
     
     
