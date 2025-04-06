@@ -1,49 +1,112 @@
-/*
- * 👋 Hello! This is an ml5.js example made and shared with ❤️.
- * Learn more about the ml5.js project: https://ml5js.org/
- * ml5.js license and Code of Conduct: https://github.com/ml5js/ml5-next-gen/blob/main/LICENSE.md
- *
- * This example demonstrates face tracking on live video through ml5.faceMesh.
- */
+// Face Mesh Detection with ml5.js  
+// https://thecodingtrain.com/tracks/ml5js-beginners-guide/ml5/facemesh  
+// https://youtu.be/R5UZsIwPbJA  
 
-let faceMesh;
 let video;
+let faceMesh;
 let faces = [];
-let options = { maxFaces: 1, refineLandmarks: false, flipHorizontal: false };
-console.log("ml5 version:", ml5.version);
+
 function preload() {
-  // Load the faceMesh model
-  faceMesh = ml5.faceMesh(options);
+  // Initialize FaceMesh model with a maximum of one face and flipped video input
+  faceMesh = ml5.faceMesh({ maxFaces: 1, flipped: true });
+}
+
+function mousePressed() {
+  // Log detected face data tothe console
+  console.log(faces);
+}
+
+function gotFaces(results) {
+  faces = results;
 }
 
 function setup() {
-  createCanvas(640, 480);
-  // Create the webcam video and hide it
-  video = createCapture(VIDEO);
-  video.size(640, 480);
+  // var canvas = createCanvas(640, 480);
+  // 
+  
+  // video.size(windowWidth, windowHeight);
+  // 
+
+  canvas = createCanvas(640, 480);
+  canvas.parent('frame');
+  video = createCapture(VIDEO, { flipped: true });
+  document.getElementById('frame').firstChild.style.width = "100%"
+  document.getElementById('frame').firstChild.style.height = "100%"
   video.hide();
-  // Start detecting faces from the webcam video
+
+  // Start detecting faces
   faceMesh.detectStart(video, gotFaces);
 }
 
-function draw() {
-  // Draw the webcam video
-  image(video, 0, 0, width, height);
-
-  // Draw all the tracked face points
-  for (let i = 0; i < faces.length; i++) {
-    let face = faces[i];
-    for (let j = 0; j < face.keypoints.length; j++) {
-      let keypoint = face.keypoints[j];
-      fill(0, 255, 0);
-      noStroke();
-      circle(keypoint.x, keypoint.y, 5);
-    }
-  }
+function getDist(aX, bX, aY, bY){
+  return Math.sqrt((aX-bX)**2 + (aY-bY)**2)
 }
 
-// Callback function for when faceMesh outputs data
-function gotFaces(results) {
-  // Save the output to the faces variable
-  faces = results;
+function draw() {
+  background(0);
+  image(video, 0, 0);
+  //0upperLip, 1lowerLip, 2leftBottomEyelid, 3leftTopEyelid, 4leftEyeOuter, 5leftEyebrowInner, 6leftLip, 7leftEyebrowOuter, 8leftEyebowMiddle, 9leftEyeInner, 
+  //10middleForhead, 11chin, 12bridge, 13rightEyebrowInner, 14rightLip, 
+  //parts=[0, 17, 61, 291, 23, 27, 33, 133, 63, 66, 55, 151, 152, 168]
+  parts=[0, 17, 23, 27, 33, 55, 61, 63, 66, 133, 151, 152, 168, 285, 291]
+  partsX=[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  partsY=[0,0,0,0,0,0,0,0,0,0,0,0,0]
+  // Ensure at least one face is detected
+  if (faces.length > 0) {
+    let face = faces[0];
+
+    // Draw keypoints on the detected face
+    //for (let i = 0; i < face.keypoints.length; i++) {
+    j=0
+    for (let i = 0; i < 468; i++) {
+      if(parts.includes(i)){
+        
+        let keypoint = face.keypoints[i];
+        partsX[j] = keypoint.x
+        partsY[j] = keypoint.y
+        j+=1
+        stroke(255, 255, 0);
+        strokeWeight(2);
+        point(keypoint.x, keypoint.y);
+      }
+      
+    }
+    vertDistance = face.lips.centerY - face.faceOval.centerY
+    //print(vertDistance/face.faceOval.height)
+    faceDiag = 0.66*(Math.sqrt(face.faceOval.width **2 + face.faceOval.height **2))
+    tilt =((vertDistance*4/face.faceOval.height) - 0.5)/30
+    mouthWidth = getDist(partsX[14],partsX[6], partsY[14],partsY[6])
+    mouthWidth = mouthWidth/face.faceOval.width
+    anger = getDist(partsX[5],partsX[13], partsY[5],partsY[13])
+    //print(anger/face.faceOval.width)
+    eyeOpen = getDist(partsX[2],partsX[8], partsY[2],partsY[8])
+    if(anger/face.faceOval.width < 0.19 && mouthWidth+tilt > 0.375){
+      text("anger", 300, 200)
+    }
+    else if(anger/face.faceOval.width < 0.19){
+      text("frowning", 300, 200)
+    }
+    else if(eyeOpen/face.faceOval.width > 0.275){
+      text("surprised", 300, 200)
+    }
+    else if(mouthWidth+tilt > 0.375){
+      text("smiling", 300, 200)
+    }
+    else{
+      text("neutral", 300, 200)
+    }
+    //print(partsY[1]-partsY[0]) 
+    // mouthHeight = mouthHeight/face.faceOval.height
+    //print(face.faceOval.width)
+    // noStroke();
+    // fill(255, 0, 0);
+    //circle(face.lips.centerX, face.lips.centerY, 5);
+    //circle(face.leftEye.centerX, face.leftEye.centerY, 5);
+    //circle(face.leftEyebrow.centerX, face.leftEyebrow.centerY, 5);
+    //circle(face.rightEye.centerX, face.rightEye.centerY, 5);
+    // circle(face.rightEyebrow.centerX, face.rightEyebrow.centerY, 5);
+    //circle(face.faceOval.centerX, face.faceOval.centerY, 5);
+    //print(face.faceOval.width)
+  }
+  
 }
