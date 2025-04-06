@@ -29,7 +29,7 @@ function setup() {
 
   canvas = createCanvas(480, 480);
   canvas.parent('frame');
-  video = createCapture(VIDEO, { flipped: true });
+  video = createCapture(VIDEO, { flipped: true, video: { facingMode: "environment" }});
   document.getElementById('frame').firstChild.style.width = "100%"
   document.getElementById('frame').firstChild.style.height = "100%"
   video.hide();
